@@ -1,10 +1,35 @@
 <html>
-<head><title>My-Tiny-Server</title></head>
+<head>
+<title>My-Tiny-Server</title>
+<style type="text/css">
+.flex-center {
+    display:flex;
+    justify-content:center;
+    margin: 30px 30px;
+}
+
+</style>
+    
+</head>
 <body> 
-<img align="middle" src="godzilla.gif">
-<video width="320" height="240" controls>
-    <source src="cat.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-</video>
+<h1 class="flex-center">Welcome to my tiny server</h1>
+<div class="godzilla-image flex-center">
+    <img width="320" height="240" align="middle" src="godzilla.gif">
+</div>
+<div class="cat-video flex-center">
+    <video width="320" height="240" controls>
+        <source src="cat.mp4" type="video/mp4">
+        Sorry, your browser doesn't support embedded videos.'
+    </video>
+</div>
+
+<div class="cgi-adder flex-center">
+    <form action="/cgi-bin/adder", method="get">
+        <input type="text" id="arg1" name="arg1" placeholder="arg1">
+        <input type="text" id="arg2" name="arg2" placeholder="arg2">
+        <input type="submit" value="add!">
+    </form>
+    
+</div>
 </body>
 </html>

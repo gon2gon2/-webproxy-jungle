@@ -13,10 +13,8 @@ int main(){
     if((buf = getenv("QUERY_STRING")) != NULL){
         p = strchr(buf, '&'); // p is the pointer for "&"
         *p = '\0';            // sperate into two array
-        strcpy(arg1, buf);    // copy string until null character found(added at line 15)
-        strcpy(arg2, p+1);    
-        n1 = atoi(arg1);      // atoi: string to number
-        n2 = atoi(arg2);
+        sscanf(buf, "arg1=%d", &n1);
+        sscanf(p+1, "arg2=%d", &n2);
     }
 
     sprintf(content, "QUERY_STRING=%d&%d<p>", n1, n2);

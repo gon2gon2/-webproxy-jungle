@@ -118,6 +118,7 @@ void clienterror(int fd, char *cause, char *errnum, char *shortmsg, char *longms
     Rio_writen(fd, buf, strlen(buf));
     sprintf(buf, "<hr><em>The Tiny Web server</em>\r\n");
     Rio_writen(fd, buf, strlen(buf));
+    Rio_writen(fd, body, strlen(body));
     /* sprintf - add string to buffer(body) */
 
 }
@@ -238,10 +239,10 @@ void serve_dynamic(int fd, char *filename, char *cgiargs)
     Rio_writen(fd, buf, strlen(buf));
   
     if (Fork() == 0) { /* Child */
-	/* Real server would set all CGI vars here */
-	setenv("QUERY_STRING", cgiargs, 1);
-	Dup2(fd, STDOUT_FILENO);         /* Redirect stdout to client */
-	Execve(filename, emptylist, environ); /* Run CGI program */
+        /* Real server would set all CGI vars here */
+        setenv("QUERY_STRING", cgiargs, 1);
+        Dup2(fd, STDOUT_FILENO);         /* Redirect stdout to client */
+        Execve(filename, emptylist, environ); /* Run CGI program */
     }
     Wait(NULL); /* Parent waits for and reaps child */
 }

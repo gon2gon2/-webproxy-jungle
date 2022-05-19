@@ -6,6 +6,7 @@
 
 /* Magic numbers */
 #define DEFAULT_PORT 80
+#define PORT_SIZE 100
 
 
 /* You won't lose style points for including this long line in your code */
@@ -54,6 +55,21 @@ int main(int argc, char **argv) {
         Pthread_create(&tid, NULL, thread, connfdp);
     }
 
+}
+
+/*
+ * thread - detach itself and process the request
+ */
+
+void *thread(void *vargp)
+{
+
+    int connfd = *((int *)vargp);
+    Pthread_detach(pthread_self());
+    Free(vargp);
+    doit(connfd);
+    Close(connfd);
+    return NULL;
 }
 
 /*handle the client HTTP transaction*/
@@ -105,20 +121,6 @@ void doit(int connfd)
     }
     Close(end_serverfd);
 }
-/*
- * thread
- */
-void *thread(void *vargp)
-{
-
-    int connfd = *((int *)vargp);
-    Pthread_detach(pthread_self());
-    Free(vargp);
-    doit(connfd);
-    Close(connfd);
-    return NULL;
-}
-
 
 
 /*
@@ -152,7 +154,7 @@ void build_http_header(char *http_header,char *hostname,char *path,int port,rio_
     {
         sprintf(host_hdr,host_hdr_format,hostname);
     }
-    /* save each key:value pair in htpp_header */
+    /* save each key:value pair in http_header */
     sprintf(http_header,"%s%s%s%s%s%s%s",
             request_hdr,
             host_hdr,
@@ -166,14 +168,14 @@ void build_http_header(char *http_header,char *hostname,char *path,int port,rio_
 }
 /*Connect to the end server*/
 inline int connect_endServer(char *hostname,int port,char *http_header){
-    char portStr[100];
+    char portStr[PORT_SIZE];
     sprintf(portStr,"%d",port);
     return Open_clientfd(hostname,portStr);
 }
 
 
 /*
- * parse_uri - 
+ * parse_uri - split uri into host, path, port
  */
 void parse_uri(char *uri,char *hostname,char *path,int *port)
 {
